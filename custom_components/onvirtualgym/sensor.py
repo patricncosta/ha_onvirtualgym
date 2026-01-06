@@ -11,12 +11,13 @@ class GymAttendancesSensor(CoordinatorEntity, SensorEntity):
     """Sensor de Presenças Mensais."""
 
     def __init__(self, coordinator):
+        """Inicializa o sensor."""
         super().__init__(coordinator)
         self._attr_translation_key = "ginasio_presencas_mensais"
         self._attr_unique_id = f"ginasio_{coordinator.socio_id}_presencas"
         self._attr_native_unit_of_measurement = "Treinos"
         self._attr_icon = "mdi:dumbbell"
-        self._attr_has_entity_name = True # Isto faz com que o nome seja [Nome da Integração] [Nome da Entidade]
+        self._attr_has_entity_name = True
 
     @property
     def native_value(self):
