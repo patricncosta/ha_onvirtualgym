@@ -1,0 +1,13 @@
+{
+  "name": "OnVirtualGym",
+  "domains": [
+    "onvirtualgym"
+  ],
+  "country": [
+    "PT"
+  ],
+  "render_readme": true,
+  "iot_class": [
+    "Cloud Polling"
+  ]
+}
