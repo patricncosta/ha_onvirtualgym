@@ -1,0 +1,35 @@
+{
+  "title": "OnVirtualGym",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Gym Authentication",
+        "description": "Enter your OnVirtualGym credentials to automatically fetch your Member ID and Token.",
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the gym server.",
+      "invalid_auth": "Invalid username or password.",
+      "unknown": "An unexpected error occurred."
+    },
+    "abort": {
+      "already_configured": "This gym account is already configured."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "ginasio_presencas_mensais": {
+        "name": "Monthly Attendances",
+        "state_attributes": {
+          "historico": {
+            "name": "Attendance History"
+          }
+        }
+      }
+    }
+  }
+}

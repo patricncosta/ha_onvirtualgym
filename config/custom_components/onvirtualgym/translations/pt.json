@@ -1,0 +1,35 @@
+{
+  "title": "Ginásio Virtual",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Autenticação no Ginásio",
+        "description": "Introduz as tuas credenciais do OnVirtualGym para obtermos o teu Número de Sócio e Token automaticamente.",
+        "data": {
+          "username": "Nome de Utilizador",
+          "password": "Palavra-passe"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Falha ao ligar ao servidor do ginásio.",
+      "invalid_auth": "Utilizador ou palavra-passe incorretos.",
+      "unknown": "Ocorreu um erro inesperado."
+    },
+    "abort": {
+      "already_configured": "Esta conta de ginásio já está configurada."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "ginasio_presencas_mensais": {
+        "name": "Presenças Mensais",
+        "state_attributes": {
+          "historico": {
+            "name": "Histórico de Registos"
+          }
+        }
+      }
+    }
+  }
+}
