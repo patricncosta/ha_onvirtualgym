@@ -10,7 +10,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 class GymAttendancesSensor(CoordinatorEntity, SensorEntity):
     """Sensor de Presenças Mensais."""
 
-def __init__(self, coordinator):
+    def __init__(self, coordinator):
         super().__init__(coordinator)
         self._attr_translation_key = "ginasio_presencas_mensais"
         self._attr_unique_id = f"ginasio_{coordinator.socio_id}_presencas"
