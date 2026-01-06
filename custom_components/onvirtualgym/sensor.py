@@ -26,5 +26,17 @@ class GymAttendancesSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def extra_state_attributes(self):
-        """Atributos extra para ver detalhes das entradas/saídas."""
-        return {"historico": self.coordinator.data.get("raw_data")}
+        """Atributos formatados."""
+        history = self.coordinator.data.get("raw_data", [])
+        
+        attrs = {
+            "history": history,
+            "total_events": len(history)
+        }
+
+        if history:
+            # Assume que o primeiro da lista é o mais recente
+            attrs["last_activity"] = f"{history[0]['event']} at {history[0]['time']}"
+            attrs["last_day"] = history[0]['date']
+
+        return attrs

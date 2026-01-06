@@ -55,11 +55,20 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
 
                 async with self.session.get(TASKS_URL, params=params, headers=headers) as resp:
                     res_json = await resp.json()
-                    presencas_lista = res_json.get("getAllAppointmentsByClientByPageOrDate", [])
+                    attendances_list = res_json.get("getAllAppointmentsByClientByPageOrDate", [])
+                    
+                    # Formatação amigável
+                    clean_history = []
+                    for record in attendances_list:
+                        clean_history.append({
+                            "event": record.get("label1"),
+                            "date": record.get("data"),
+                            "time": record.get("hora")
+                        })
                     
                     return {
-                        "count": int(len(presencas_lista) / 2),
-                        "raw_data": presencas_lista
+                        "count": int(len(attendances_list) / 2),
+                        "raw_data": clean_history # Agora enviamos a lista formatada
                     }
         except Exception as err:
             raise UpdateFailed(f"Erro ao comunicar com API: {err}")
