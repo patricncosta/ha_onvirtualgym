@@ -27,14 +27,7 @@ class GymAttendancesSensor(CoordinatorEntity, SensorEntity):
     @property
     def extra_state_attributes(self):
         """Formatted attributes for dashboard."""
-        history = self.coordinator.data.get("raw_data", [])
-        attrs = {"history": history}
-
-        if history:
-            # Last activity
-            last_activity = history[0]
-            attrs["event"] = last_activity.get("event")
-            attrs["date"] = last_activity.get("date")
-            attrs["time"] = last_activity.get("time")
+        sessions = self.coordinator.data.get("sessions", [])
+        attrs = {"history": sessions}
             
         return attrs

@@ -57,18 +57,35 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
                 async with self.session.get(TASKS_URL, params=params, headers=headers) as resp:
                     res_json = await resp.json()
                     events_list = res_json.get("getAllAppointmentsByClientByPageOrDate", [])
-                    
-                    clean_history = []
-                    for event in events_list:
-                        clean_history.append({
-                            "event": event.get("label1"),
-                            "date": event.get("data"),
-                            "time": event.get("hora")
-                        })
-                    
+                    sessions = []
+                    i = 0
+
+                    while i < len(events_list):
+                        current_event = events_list[i]
+                        # If the most recent event is an Exit (type 9), we search for an Entrance (type 5) right away
+                        if current_event.get("type", "") == "9":
+                            next_event = events_list[i+1] if (i+1) < len(events_list) else None
+                            
+                            sessions.append({
+                                "date": current_event.get("data"),
+                                "start": next_event.get("hora") if next_event else "---",
+                                "exit": current_event.get("hora"),
+                            })
+                            i += 2 # We skip the pair
+                        elif current_event.get("type", "") == "5":
+                            # If the event is an Entrance
+                            #sessions.append({
+                            #    "date": current_event.get("data"),
+                            #    "entrance": current_event.get("hora"),
+                            #    "exit": "Em ginásio",
+                            #})
+                            i += 1 # Skip
+                        else:
+                            i += 1 # Skip
+
                     return {
-                        "count": int(len(events_list) / 2),
-                        "raw_data": clean_history
+                        "count": len(sessions),
+                        "sessions": sessions
                     }
         except Exception as err:
             raise UpdateFailed(f"Error communicating with API: {err}")
