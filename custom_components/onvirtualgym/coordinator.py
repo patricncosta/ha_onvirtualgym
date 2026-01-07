@@ -66,12 +66,14 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
                         if current_event.get("type", "") == "9":
                             next_event = events_list[i+1] if (i+1) < len(events_list) else None
                             duration_minutes = 0
-                            
-                            if next_event:
-                                entry_time = datetime.fromisoformat(next_event.get("hora"))
-                                exit_time = datetime.fromisoformat(current_event.get("hora"))
+
+                            try:
+                                entry_time = datetime.fromisoformat(next_event.get("hora").replace("Z", "+00:00"))
+                                exit_time = datetime.fromisoformat(current_event.get("hora").replace("Z", "+00:00"))
                                 duration = exit_time - entry_time
                                 duration_minutes = round(duration.total_seconds() / 60)
+                            except (ValueError, TypeError):
+                                _LOGGER.warning("Invalid hour format for the session on  %s", current_event.get("data"))
                             
                             sessions.append({
                                 "date": current_event.get("data"),
