@@ -21,7 +21,7 @@ class GymConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         member_name = data["loginUserClient"][0]["nome"]
                         
                         return self.async_create_entry(
-                            title=user_name, 
+                            title=user_input["username"], 
                             data={**user_input, "member_id": member_id, "member_name": member_name}
                         )
                     errors["base"] = "invalid_auth"
