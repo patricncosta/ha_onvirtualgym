@@ -59,7 +59,7 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
                     attendances_list = res_json.get("getAllAppointmentsByClientByPageOrDate", [])
                     
                     clean_history = []
-                    for record in attendances_list:
+                    for record in attendances_list[0]:
                         clean_history.append({
                             "event": record.get("label1"),
                             "date": record.get("data"),

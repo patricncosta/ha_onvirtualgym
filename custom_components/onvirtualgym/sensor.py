@@ -17,7 +17,7 @@ class GymAttendancesSensor(CoordinatorEntity, SensorEntity):
         self._attr_translation_placeholders = {"member_name": coordinator.member_name}
         self._attr_unique_id = f"onvirtualgym_{coordinator.member_id}_attendances"
         self._attr_icon = "mdi:dumbbell"
-        self._attr_has_entity_name = False
+        self._attr_has_entity_name = True
 
     @property
     def native_value(self):
