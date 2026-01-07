@@ -14,7 +14,7 @@ class GymAttendancesSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator):
         super().__init__(coordinator)
         self._attr_translation_key = "onvirtualgym_monthly_attendances"
-        self._attr_unique_id = f"onvirtualgym_{coordinator.member_id}_attendances_v2"
+        self._attr_unique_id = f"onvirtualgym_{coordinator.member_id}_attendances"
         self._attr_icon = "mdi:dumbbell"
         self._attr_has_entity_name = True
 

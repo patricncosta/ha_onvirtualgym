@@ -65,11 +65,19 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
                         # If the most recent event is an Exit (type 9), we search for an Entrance (type 5) right away
                         if current_event.get("type", "") == "9":
                             next_event = events_list[i+1] if (i+1) < len(events_list) else None
+                            duration_minutes = 0
+                            
+                            if next_event:
+                                entry_time = datetime.fromisoformat(next_event.get("hora"))
+                                exit_time = datetime.fromisoformat(current_event.get("hora"))
+                                duration = exit_time - entry_time
+                                duration_minutes = round(duration.total_seconds() / 60)
                             
                             sessions.append({
                                 "date": current_event.get("data"),
                                 "start": next_event.get("hora") if next_event else "---",
                                 "exit": current_event.get("hora"),
+                                "duration": duration_minutes
                             })
                             i += 2 # We skip the pair
                         else:
