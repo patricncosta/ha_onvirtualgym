@@ -27,9 +27,19 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
     async def _async_get_token(self):
         """Performs login to retrieve new token."""
         payload = {"username": self.username, "password": self.password}
-        async with self.session.post(LOGIN_URL, json=payload) as resp:
-            data = await resp.json()
-            return data.get("token")
+        try:
+            async with self.session.post(LOGIN_URL, json=payload, timeout=10) as resp:
+                # If it's not 200 OK, log the error to know what API tells
+                if resp.status != 200:
+                    text = await resp.text()
+                    _LOGGER.error("Error logging in (Status %s): %s", resp.status, text)
+                    return None
+                
+                data = await resp.json()
+                return data.get("token")
+        except Exception as e:
+            _LOGGER.error("Network error trying to login: %s", e)
+            return None
 
     async def _async_update_data(self):
         """Centralizes all API requests."""
@@ -55,6 +65,9 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
                 headers = {"Authorization": f"Bearer {self.token}"}
 
                 async with self.session.get(TASKS_URL, params=params, headers=headers) as resp:
+                    if resp.status != 200:
+                        raise UpdateFailed(f"API answered with status {resp.status}")
+                        
                     res_json = await resp.json()
                     events_list = res_json.get("getAllAppointmentsByClientByPageOrDate", [])
                     sessions = []
@@ -62,28 +75,31 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
 
                     while i < len(events_list):
                         current_event = events_list[i]
-                        # If the most recent event is an Exit (type 9), we search for an Entrance (type 5) right away
-                        if current_event.get("type", "") == "9":
-                            next_event = events_list[i+1] if (i+1) < len(events_list) else None
-                            duration_minutes = 0
-
-                            try:
-                                entry_time = datetime.fromisoformat(next_event.get("hora").replace("Z", "+00:00"))
-                                exit_time = datetime.fromisoformat(current_event.get("hora").replace("Z", "+00:00"))
-                                duration = exit_time - entry_time
-                                duration_minutes = round(duration.total_seconds() / 60)
-                            except (ValueError, TypeError):
-                                _LOGGER.warning("Invalid hour format for the session on  %s", current_event.get("data"))
+                        
+                        # We are looking for an Exit (9) with an Entry (5) next to it
+                        if current_event.get("type") == "9" and (i + 1) < len(events_list):
+                            next_event = events_list[i+1]
                             
-                            sessions.append({
-                                "date": current_event.get("data"),
-                                "start": next_event.get("hora") if next_event else "---",
-                                "exit": current_event.get("hora"),
-                                "duration": duration_minutes
-                            })
-                            i += 2 # We skip the pair
-                        else:
-                            i += 1 # Skip
+                            if next_event.get("type") == "5":
+                                duration_minutes = 0
+                                try:
+                                    entry_time = datetime.fromisoformat(next_event.get("hora").replace("Z", "+00:00"))
+                                    exit_time = datetime.fromisoformat(current_event.get("hora").replace("Z", "+00:00"))
+                                    duration = exit_time - entry_time
+                                    duration_minutes = round(duration.total_seconds() / 60)
+                                except (ValueError, TypeError, AttributeError) as e:
+                                    _LOGGER.debug("Error processing sessions times: %s", e)
+
+                                sessions.append({
+                                    "date": current_event.get("data"),
+                                    "start": next_event.get("hora"),
+                                    "exit": current_event.get("hora"),
+                                    "duration": duration_minutes
+                                })
+                                i += 2
+                                continue
+                        
+                        i += 1
 
                     return {
                         "count": len(sessions),
