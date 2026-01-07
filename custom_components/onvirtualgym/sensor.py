@@ -16,7 +16,6 @@ class GymAttendancesSensor(CoordinatorEntity, SensorEntity):
         self._attr_translation_key = "onvirtualgym_monthly_attendances"
         self._attr_unique_id = f"onvirtualgym_{coordinator.member_id}_attendances"
         self._attr_icon = "mdi:dumbbell"
-        self._attr_name = None
         self._attr_has_entity_name = False
 
     @property

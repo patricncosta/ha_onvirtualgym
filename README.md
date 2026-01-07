@@ -1,35 +1,35 @@
-# 🏋️ Ginásio Virtual - Integração para Home Assistant
+# 🏋️ OnVirtualGym - Home Assistant Integration
 
-Esta é uma integração personalizada (Custom Component) para o Home Assistant que permite monitorizar os dados da tua conta no OnVirtualGym, como as presenças mensais no ginásio.
+This is a Custom Component for Home Assistant that allows you to monitor your OnVirtualGym account data, such as your monthly gym attendances.
 
-**Aviso**: Esta integração é um projeto comunitário e não é oficialmente suportada pelo OnVirtualGym.
+**Disclaimer**: This integration is a community project and is not officially supported by OnVirtualGym.
 
-## ✨ Funcionalidades
+## ✨ Features
 
-* Monitoriza o número de presenças no ginásio durante o mês atual.
-* Autenticação via Nome de Utilizador e Palavra-passe.
-* Obtém automaticamente o Token de acesso e o Número de Sócio.
-* Atualização automática dos dados (por padrão, de hora em hora).
-* Configuração fácil via interface gráfica (UI).
+* Monitors the number of gym attendances during the current month.
+* Authentication via Username and Password.
+* Automatically retrieves the Access Token and Member ID.
+* Automatic data updates (defaulting to every hour).
+* Easy configuration via User Interface (UI).
 
-## 🚀 Instalação
+## 🚀 Installation
 
-### Instalação via HACS (Recomendado)
+### Installation via HACS (Recommended)
 
-1.  Abre o **HACS** no teu Home Assistant.
-2.  Vai a `Integrações` e clica nos `três pontos verticais` no canto superior direito.
-3.  Seleciona `Custom repositories`.
-4.  Copia o URL deste repositório (`https://github.com/patricncosta/ha_onvirtualgym`) e cola-o no campo `Repository`.
-5.  Em `Category`, escolhe `Integration`.
-6.  Clica em `ADD`.
-7.  Procura pela integração `OnVirtualGym` na lista do HACS e clica em `INSTALL`.
-8.  Reinicia o teu Home Assistant.
+1. Open **HACS** in your Home Assistant.
+2. Go to `Integrations` and click the `three vertical dots` in the top right corner.
+3. Select `Custom repositories`.
+4. Copy this repository's URL (`https://github.com/patricncosta/ha_onvirtualgym`) and paste it into the `Repository` field.
+5. Under `Category`, choose `Integration`.
+6. Click `ADD`.
+7. Search for the `OnVirtualGym` integration in the HACS list and click `INSTALL`.
+8. Restart your Home Assistant.
 
-### Instalação Manual
+### Manual Installation
 
-1.  Navega até à pasta `custom_components` na tua configuração do Home Assistant.
-2.  Cria uma nova pasta chamada `onvirtualgym
-3.  Copia todos os ficheiros desta integração (do repositório) para a pasta `onvirtualgym` que acabaste de criar. A estrutura final deverá ser:
+1. Navigate to the `custom_components` folder in your Home Assistant configuration.
+2. Create a new folder named `onvirtualgym`.
+3. Copy all the integration files from this repository into the `onvirtualgym` folder you just created. The final structure should look like this:
     ```
     config/custom_components/onvirtualgym/
     ├── __init__.py
@@ -42,28 +42,28 @@ Esta é uma integração personalizada (Custom Component) para o Home Assistant 
         ├── en.json
         └── pt.json
     ```
-4.  Reinicia o teu Home Assistant.
+4. Restart your Home Assistant.
 
-## ⚙️ Configuração
+## ⚙️ Configuration
 
-Após a instalação (via HACS ou manual) e o reinício do Home Assistant:
+After installation (via HACS or manual) and restarting Home Assistant:
 
-1.  Vai a **Definições > Dispositivos e Serviços**.
-2.  Clica em `+ ADICIONAR INTEGRAÇÃO` no canto inferior direito.
-3.  Procura por `OnVirtualGym`.
-4.  Introduz o teu `Nome de Utilizador` e `Palavra-passe` do OnVirtualGym.
-5.  Clica em `ENVIAR`.
+1. Go to **Settings > Devices & Services**.
+2. Click `+ ADD INTEGRATION` in the bottom right corner.
+3. Search for `OnVirtualGym`.
+4. Enter your OnVirtualGym `Username` and `Password`.
+5. Click `SUBMIT`.
 
-A integração irá automaticamente tentar fazer login, obter o teu número de sócio e criar a entidade `sensor.onvirtualgym_monthly_attendances`.
+The integration will automatically attempt to log in, retrieve your member ID, and create the `sensor.onvirtualgym_monthly_attendances` entity.
 
-## 📊 Entidades Criadas
+## 📊 Created Entities
 
-* `sensor.onvirtualgym_monthly_attendances`: Mostra o número de idas ao ginásio no mês atual. Possui um atributo `history` com a lista completa de entradas/saídas.
+* `sensor.onvirtualgym_monthly_attendances`: Displays the number of gym visits in the current month. Includes a `history` attribute with a list of grouped workout sessions (Entry and Exit times).
 
-## 🤝 Contribuições
+## 🤝 Contributions
 
-Contribuições são bem-vindas! Se encontrares um bug, tiveres uma ideia para uma nova funcionalidade ou quiseres ajudar a melhorar o código, por favor, abre uma `Issue` ou um `Pull Request` neste repositório.
+Contributions are welcome! If you find a bug, have an idea for a new feature, or want to help improve the code, please open an `Issue` or a `Pull Request` in this repository.
 
-## 📜 Licença
+## 📜 License
 
-Este projeto é licenciado sob a licença MIT. Consulta o ficheiro `LICENSE` para mais detalhes.
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
