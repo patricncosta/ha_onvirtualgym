@@ -23,7 +23,7 @@
   "entity": {
     "sensor": {
       "onvirtualgym_monthly_attendances": {
-        "name": "{member_name }'s Attendances",
+        "name": "{member_name}'s Attendances",
         "unit_of_measurement": "Workouts",
         "state_attributes": {
           "history": { "name": "History" },
