@@ -14,9 +14,9 @@ class GymAttendancesSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator):
         super().__init__(coordinator)
         self._attr_translation_key = "onvirtualgym_monthly_attendances"
-        self._attr_unique_id = f"onvirtualgym_{coordinator.member_id}_attendances"
+        self._attr_unique_id = f"onvirtualgym_{coordinator.member_id}_attendances_v2"
         self._attr_icon = "mdi:dumbbell"
-        self._attr_has_entity_name = False
+        self._attr_has_entity_name = True
 
     @property
     def native_value(self):
@@ -33,7 +33,7 @@ class GymAttendancesSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def translation_placeholders(self):
-        """Define os valores para as variáveis no ficheiro de tradução."""
+        """Sets the values for the variables in the location files."""
         return {
             "member_name": self.coordinator.member_name
         }

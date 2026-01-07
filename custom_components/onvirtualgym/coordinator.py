@@ -72,14 +72,6 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
                                 "exit": current_event.get("hora"),
                             })
                             i += 2 # We skip the pair
-                        elif current_event.get("type", "") == "5":
-                            # If the event is an Entrance
-                            #sessions.append({
-                            #    "date": current_event.get("data"),
-                            #    "entrance": current_event.get("hora"),
-                            #    "exit": "Em ginásio",
-                            #})
-                            i += 1 # Skip
                         else:
                             i += 1 # Skip
 
