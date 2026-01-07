@@ -18,11 +18,11 @@ class GymConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     if resp.status == 200 and data.get("token"):
                         # We extract the Member ID and Full Name of the first client at the login
                         member_id = data["loginUserClient"][0]["numSocio"]
-                        user_name = data["loginUserClient"][0]["nome"]
+                        member_name = data["loginUserClient"][0]["nome"]
                         
                         return self.async_create_entry(
                             title=user_name, 
-                            data={**user_input, "member_id": member_id, "member_name": user_name}
+                            data={**user_input, "member_id": member_id, "member_name": member_name}
                         )
                     errors["base"] = "invalid_auth"
             except Exception:

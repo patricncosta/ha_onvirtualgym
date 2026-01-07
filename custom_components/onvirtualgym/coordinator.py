@@ -10,7 +10,7 @@ _LOGGER = logging.getLogger(__name__)
 class GymUpdateCoordinator(DataUpdateCoordinator):
     """Manages the data update via API."""
 
-    def __init__(self, hass, username, password, member_id):
+    def __init__(self, hass, username, password, member_id, member_name):
         super().__init__(
             hass, 
             _LOGGER, 
