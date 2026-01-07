@@ -56,18 +56,18 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
 
                 async with self.session.get(TASKS_URL, params=params, headers=headers) as resp:
                     res_json = await resp.json()
-                    attendances_list = res_json.get("getAllAppointmentsByClientByPageOrDate", [])
+                    events_list = res_json.get("getAllAppointmentsByClientByPageOrDate", [])
                     
                     clean_history = []
-                    for record in attendances_list[0]:
+                    for event in events_list:
                         clean_history.append({
-                            "event": record.get("label1"),
-                            "date": record.get("data"),
-                            "time": record.get("hora")
+                            "event": event.get("label1"),
+                            "date": event.get("data"),
+                            "time": event.get("hora")
                         })
                     
                     return {
-                        "count": int(len(attendances_list) / 2),
+                        "count": int(len(events_list) / 2),
                         "raw_data": clean_history
                     }
         except Exception as err:

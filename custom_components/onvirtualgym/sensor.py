@@ -33,9 +33,8 @@ class GymAttendancesSensor(CoordinatorEntity, SensorEntity):
         if history:
             # Last activity
             last_activity = history[0]
-            attrs["event"] = last_activity.get("label1")
-            attrs["time"] = last_activity.get("hora")
-            attrs["date"] = last_activity.get("data")
-            attrs["last_activity"] = f"{attrs['event']} - {attrs['time']}"
+            attrs["event"] = last_activity.get("event")
+            attrs["date"] = last_activity.get("date")
+            attrs["time"] = last_activity.get("time")
             
         return attrs
