@@ -22,14 +22,13 @@
   },
   "entity": {
     "sensor": {
-      "ginasio_presencas_mensais": {
-        "name": "Monthly Attendances",
+      "onvirtualgym_monthly_attendances": {
+        "name": "{member_name }'s Attendances",
+        "unit_of_measurement": "Workouts",
         "state_attributes": {
-          "historico": {
-            "name": "Attendance History"
-          }
+          "history": { "name": "History" },
+          "last_activity": { "name": "Last Activity" }
         }
-      }
     }
   }
 }

@@ -8,46 +8,47 @@ from .const import LOGIN_URL, TASKS_URL
 _LOGGER = logging.getLogger(__name__)
 
 class GymUpdateCoordinator(DataUpdateCoordinator):
-    """Gere a atualização de dados via API."""
+    """Manages the data update via API."""
 
-    def __init__(self, hass, username, password, socio_id):
+    def __init__(self, hass, username, password, member_id):
         super().__init__(
             hass, 
             _LOGGER, 
-            name="Ginasio Data", 
+            name=f"OnVirtualGym ({username})",
             update_interval=timedelta(hours=1)
         )
         self.username = username
         self.password = password
-        self.socio_id = socio_id
+        self.member_id = member_id
+        self.member_name = member_name
         self.token = None
         self.session = async_get_clientsession(hass)
 
     async def _async_get_token(self):
-        """Faz login para obter novo token."""
+        """Performs login to retrieve new token."""
         payload = {"username": self.username, "password": self.password}
         async with self.session.post(LOGIN_URL, json=payload) as resp:
             data = await resp.json()
             return data.get("token")
 
     async def _async_update_data(self):
-        """Centraliza todos os pedidos à API."""
+        """Centralizes all API requests."""
         try:
             async with async_timeout.timeout(15):
-                # 1. Atualizar Token
+                # 1. Update Token
                 self.token = await self._async_get_token()
                 if not self.token:
-                    raise UpdateFailed("Falha na autenticação")
+                    raise UpdateFailed("Auth failed")
 
-                # 2. Obter Presenças
-                inicio = datetime.now().strftime('%Y-%m-01')
-                fim = (datetime.now().replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
+                # 2. Get Attendances
+                start = datetime.now().strftime('%Y-%m-01')
+                end = (datetime.now().replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
                 
                 params = {
-                    "fk_numSocio": self.socio_id,
+                    "fk_numSocio": self.member_id,
                     "method": "getAllAppointmentsByClientByPageOrDate",
-                    "dataInicio": inicio,
-                    "dataFim": fim.strftime('%Y-%m-%d'),
+                    "dataInicio": start,
+                    "dataFim": end.strftime('%Y-%m-%d'),
                     "filter": "5,9",
                     "version": "10"
                 }
@@ -57,7 +58,6 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
                     res_json = await resp.json()
                     attendances_list = res_json.get("getAllAppointmentsByClientByPageOrDate", [])
                     
-                    # Formatação amigável
                     clean_history = []
                     for record in attendances_list:
                         clean_history.append({
@@ -68,7 +68,7 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
                     
                     return {
                         "count": int(len(attendances_list) / 2),
-                        "raw_data": clean_history # Agora enviamos a lista formatada
+                        "raw_data": clean_history
                     }
         except Exception as err:
-            raise UpdateFailed(f"Erro ao comunicar com API: {err}")
+            raise UpdateFailed(f"Error communicating with API: {err}")

@@ -3,8 +3,8 @@
   "config": {
     "step": {
       "user": {
-        "title": "Autenticação no Ginásio",
-        "description": "Introduz as tuas credenciais do OnVirtualGym para obtermos o teu Número de Sócio e Token automaticamente.",
+        "title": "Autenticação do Ginásio",
+        "description": "Introduz as tuas credenciais do OnVirtualGym para obtermos o teu Número de Sócio e o Token automaticamente.",
         "data": {
           "username": "Nome de Utilizador",
           "password": "Palavra-passe"
@@ -22,12 +22,12 @@
   },
   "entity": {
     "sensor": {
-      "ginasio_presencas_mensais": {
-        "name": "Presenças Mensais",
+      "onvirtualgym_monthly_attendances": {
+        "name": "Treinos de {member_name}",
+        "unit_of_measurement": "Treinos",
         "state_attributes": {
-          "historico": {
-            "name": "Histórico de Registos"
-          }
+          "history": { "name": "Histórico de Registos" },
+          "last_activity": { "name": "Última Atividade" }
         }
       }
     }

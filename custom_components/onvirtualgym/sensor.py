@@ -1,42 +1,41 @@
+
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    """Configura os sensores."""
+    """Setup the sensors."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
     async_add_entities([GymAttendancesSensor(coordinator)])
 
 class GymAttendancesSensor(CoordinatorEntity, SensorEntity):
-    """Sensor de Presenças Mensais."""
+    """Monthly Attendances Sensor."""
 
     def __init__(self, coordinator):
-        """Inicializa o sensor."""
         super().__init__(coordinator)
-        self._attr_translation_key = "ginasio_presencas_mensais"
-        self._attr_unique_id = f"ginasio_{coordinator.socio_id}_presencas"
-        self._attr_native_unit_of_measurement = "Treinos"
+        self._attr_translation_key = "onvirtualgym_monthly_attendances"
+        self._attr_translation_placeholders = {"member_name": coordinator.member_name}
+        self._attr_unique_id = f"onvirtualgym_{coordinator.member_id}_attendances"
         self._attr_icon = "mdi:dumbbell"
-        self._attr_has_entity_name = True
+        self._attr_has_entity_name = False
 
     @property
     def native_value(self):
-        """Retorna o número de treinos (contagem / 2)."""
+        """Returns the number of workouts (activity count / 2)."""
         return self.coordinator.data.get("count")
 
     @property
     def extra_state_attributes(self):
-        """Atributos formatados."""
+        """Formatted attributes for dashboard."""
         history = self.coordinator.data.get("raw_data", [])
-        
-        attrs = {
-            "history": history,
-            "total_events": len(history)
-        }
+        attrs = {"history": history}
 
         if history:
-            # Assume que o primeiro da lista é o mais recente
-            attrs["last_activity"] = f"{history[0]['event']} at {history[0]['time']}"
-            attrs["last_day"] = history[0]['date']
-
+            # Last activity
+            last_activity = history[0]
+            attrs["event"] = last_activity.get("label1")
+            attrs["time"] = last_activity.get("hora")
+            attrs["date"] = last_activity.get("data")
+            attrs["last_activity"] = f"{attrs['event']} - {attrs['time']}"
+            
         return attrs

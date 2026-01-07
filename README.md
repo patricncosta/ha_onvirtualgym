@@ -54,11 +54,11 @@ Após a instalação (via HACS ou manual) e o reinício do Home Assistant:
 4.  Introduz o teu `Nome de Utilizador` e `Palavra-passe` do OnVirtualGym.
 5.  Clica em `ENVIAR`.
 
-A integração irá automaticamente tentar fazer login, obter o teu número de sócio e criar a entidade `sensor.ginasio_presencas_mensais`.
+A integração irá automaticamente tentar fazer login, obter o teu número de sócio e criar a entidade `sensor.onvirtualgym_monthly_attendances`.
 
 ## 📊 Entidades Criadas
 
-* `sensor.ginasio_presencas_mensais`: Mostra o número de idas ao ginásio no mês atual. Possui um atributo `histórico` com a lista completa de entradas/saídas.
+* `sensor.onvirtualgym_monthly_attendances`: Mostra o número de idas ao ginásio no mês atual. Possui um atributo `history` com a lista completa de entradas/saídas.
 
 ## 🤝 Contribuições
 

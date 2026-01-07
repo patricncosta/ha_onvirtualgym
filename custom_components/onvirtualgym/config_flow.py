@@ -4,25 +4,25 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .const import DOMAIN, LOGIN_URL
 
 class GymConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Fluxo de configuração via UI."""
+    """Configuration flow via UI."""
     VERSION = 1
 
     async def async_step_user(self, user_input=None):
         errors = {}
         if user_input is not None:
-            # Validar credenciais e obter socio_id antes de criar a entrada
+            # Validate credentials and get Member ID before creating an entry
             session = async_get_clientsession(self.hass)
             try:
                 async with session.post(LOGIN_URL, json=user_input) as resp:
                     data = await resp.json()
                     if resp.status == 200 and data.get("token"):
-                        # Extraímos o socio_id do primeiro cliente no login
-                        socio_id = data["loginUserClient"][0]["numSocio"]
+                        # We extract the Member ID and Full Name of the first client at the login
+                        member_id = data["loginUserClient"][0]["numSocio"]
                         user_name = data["loginUserClient"][0]["nome"]
                         
                         return self.async_create_entry(
                             title=user_name, 
-                            data={**user_input, "socio_id": socio_id}
+                            data={**user_input, "member_id": member_id, "member_name": user_name}
                         )
                     errors["base"] = "invalid_auth"
             except Exception:
