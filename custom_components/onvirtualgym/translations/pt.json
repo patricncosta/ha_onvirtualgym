@@ -23,7 +23,7 @@
   "entity": {
     "sensor": {
       "onvirtualgym_monthly_attendances": {
-        "name": "Treinos de {member_name}",
+        "name": "Treinos",
         "unit_of_measurement": "Treinos",
         "state_attributes": {
           "history": { "name": "Histórico de Registos" },

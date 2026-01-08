@@ -83,12 +83,25 @@ class GymUpdateCoordinator(DataUpdateCoordinator):
                             if next_event.get("type") == "5":
                                 duration_minutes = 0
                                 try:
-                                    entry_time = datetime.fromisoformat(next_event.get("hora").replace("Z", "+00:00"))
-                                    exit_time = datetime.fromisoformat(current_event.get("hora").replace("Z", "+00:00"))
+                                    fmt = "%Y-%m-%d %H:%M:%S"
+    
+                                    # Clean strings (remove 'Z' if it exists)
+                                    start_str = f"{current_event.get('data')} {next_event.get('hora').replace('Z', '')}"
+                                    exit_str = f"{current_event.get('data')} {current_event.get('hora').replace('Z', '')}"
+                                    
+                                    entry_time = datetime.strptime(start_str, fmt)
+                                    exit_time = datetime.strptime(exit_str, fmt)
+                                    
+                                    # 2. Calcular a diferença
                                     duration = exit_time - entry_time
                                     duration_minutes = round(duration.total_seconds() / 60)
+                                    
+                                    # Validação: se o ginásio registar saída antes da entrada (erro de log), pomos 0
+                                    if duration_minutes < 0:
+                                        duration_minutes = 0
                                 except (ValueError, TypeError, AttributeError) as e:
                                     _LOGGER.debug("Error processing sessions times: %s", e)
+                                    duration_minutes = 0
 
                                 sessions.append({
                                     "date": current_event.get("data"),
